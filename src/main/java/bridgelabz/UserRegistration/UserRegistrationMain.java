@@ -3,7 +3,7 @@ package bridgelabz.UserRegistration;
 import java.util.Scanner;
 
 public class UserRegistrationMain {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserRegistrationException {
 		UserRegistration ur = new UserRegistration();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter first name");

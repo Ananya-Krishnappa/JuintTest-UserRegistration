@@ -1,349 +1,608 @@
 package bridgelabz.UserRegistration;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-@RunWith(JUnit4.class)
 public class UserRegistrationTest {
 	UserRegistration userRegistration;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		userRegistration = new UserRegistration();
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenNameAndFieldAreNull() {
+	public void validate_shouldReturnFalseWhenNameAndFieldAreNull() throws UserRegistrationException {
 		boolean result = userRegistration.validate(null, null);
 		assertFalse(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenNameIsNull() {
+	public void validate_shouldReturnFalseWhenNameIsNull() throws UserRegistrationException {
 		boolean result = userRegistration.validate(null, InputField.FIRST_NAME);
 		assertFalse(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenFirstNameStartsWithCaps() {
+	public void validate_shouldReturnTrueWhenFirstNameStartsWithCaps() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Ananya", InputField.FIRST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameNotStartsWithCaps() {
-		boolean result = userRegistration.validate("ananya", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameNotStartsWithCaps() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("ananya", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameHasLessThanThreeChars() {
-		boolean result = userRegistration.validate("An", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameHasLessThanThreeChars() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("An", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenFirstNameHasThreeChars() {
+	public void validate_shouldReturnTrueWhenFirstNameHasThreeChars() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Ana", InputField.FIRST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenFirstNameHasMoreThanThreeChars() {
+	public void validate_shouldReturnTrueWhenFirstNameHasMoreThanThreeChars() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Anany", InputField.FIRST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameHasDigits() {
-		boolean result = userRegistration.validate("Anany1", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameHasDigits() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("Anany1", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameHasSpecialChars() {
-		boolean result = userRegistration.validate("Anany@", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameHasSpecialChars() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("Anany@", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameHasSpace() {
-		boolean result = userRegistration.validate("An any@", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameHasSpace() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("An any@", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenFirstNameHasMoreThanOneCaps() {
-		boolean result = userRegistration.validate("AnAany", InputField.FIRST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenFirstNameHasMoreThanOneCaps() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("AnAany", InputField.FIRST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameIsNull() {
+	public void validate_shouldReturnFalseWhenLastNameIsNull() throws UserRegistrationException {
 		boolean result = userRegistration.validate(null, InputField.LAST_NAME);
 		assertFalse(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenLastNameStartsWithCaps() {
+	public void validate_shouldReturnTrueWhenLastNameStartsWithCaps() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Ananya", InputField.LAST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameNotStartsWithCaps() {
-		boolean result = userRegistration.validate("ananya", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameNotStartsWithCaps() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("ananya", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameHasLessThanThreeChars() {
-		boolean result = userRegistration.validate("An", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameHasLessThanThreeChars() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("An", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenLastNameHasThreeChars() {
+	public void validate_shouldReturnTrueWhenLastNameHasThreeChars() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Ana", InputField.LAST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenLastNameHasMoreThanThreeChars() {
+	public void validate_shouldReturnTrueWhenLastNameHasMoreThanThreeChars() throws UserRegistrationException {
 		boolean result = userRegistration.validate("Anany", InputField.LAST_NAME);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameHasDigits() {
-		boolean result = userRegistration.validate("Anany1", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameHasDigits() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("Anany1", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameHasSpecialChars() {
-		boolean result = userRegistration.validate("Anany@", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameHasSpecialChars() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("Anany@", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameHasSpace() {
-		boolean result = userRegistration.validate("An any@", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameHasSpace() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("An any@", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenLastNameHasMoreThanOneCaps() {
-		boolean result = userRegistration.validate("AnAany", InputField.LAST_NAME);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenLastNameHasMoreThanOneCaps() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("AnAany", InputField.LAST_NAME);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPhoneNumHasTwoDigitCountryCode() {
+	public void validate_shouldReturnTrueWhenPhoneNumHasTwoDigitCountryCode() throws UserRegistrationException {
 		boolean result = userRegistration.validate("91 1234566789", InputField.PHONE_NO);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPhoneNumHasTwoDigitCountryCodeFollowedBySpace() {
+	public void validate_shouldReturnTrueWhenPhoneNumHasTwoDigitCountryCodeFollowedBySpace()
+			throws UserRegistrationException {
 		boolean result = userRegistration.validate("91 1234566789", InputField.PHONE_NO);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPhNoHasTwoDigitCountryCodeFollowedBySpaceAndTenDigitPhNo() {
+	public void validate_shouldReturnTrueWhenPhNoHasTwoDigitCountryCodeFollowedBySpaceAndTenDigitPhNo()
+			throws UserRegistrationException {
 		boolean result = userRegistration.validate("91 1234566789", InputField.PHONE_NO);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeNoSpaceAndTenDigitPhNo() {
-		boolean result = userRegistration.validate("911234566789", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeNoSpaceAndTenDigitPhNo()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("911234566789", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeSpaceAndLessThanTenDigitPhNo() {
-		boolean result = userRegistration.validate("91 12345667", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeSpaceAndLessThanTenDigitPhNo()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91 12345667", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeSpaceAndMoreThanTenDigitPhNo() {
-		boolean result = userRegistration.validate("91 123456672345", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasTwoDigitCountryCodeSpaceAndMoreThanTenDigitPhNo()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91 123456672345", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasMoreThanTwoDigitCountryCode() {
-		boolean result = userRegistration.validate("912 123456672345", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasMoreThanTwoDigitCountryCode() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("912 123456672345", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasLessThanTwoDigitCountryCode() {
-		boolean result = userRegistration.validate("9 123456672345", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasLessThanTwoDigitCountryCode() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("9 123456672345", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasNoTwoDigitCountryCode() {
-		boolean result = userRegistration.validate(" 123456672345", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasNoTwoDigitCountryCode() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate(" 123456672345", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasOnlyCountryCode() {
-		boolean result = userRegistration.validate("91", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasOnlyCountryCode() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasNoCountryCode() {
-		boolean result = userRegistration.validate("9134567890", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasNoCountryCode() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("9134567890", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasAlpha() {
-		boolean result = userRegistration.validate("91as567890", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasAlpha() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91as567890", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasSpecialChars() {
-		boolean result = userRegistration.validate("91@#567890", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasSpecialChars() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91@#567890", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPhNoHasSpaceInBetween() {
-		boolean result = userRegistration.validate("91 1234 567890", InputField.PHONE_NO);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPhNoHasSpaceInBetween() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("91 1234 567890", InputField.PHONE_NO);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndEightChars() {
+	public void validate_shouldReturnTrueWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndEightChars()
+			throws UserRegistrationException {
 		boolean result = userRegistration.validate("Anany12@q", InputField.PASSWORD);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndLessThanEightChars() {
-		boolean result = userRegistration.validate("Anny12@", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndLessThanEightChars()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("Anny12@", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndMoreThanEightChars() {
+	public void validate_shouldReturnTrueWhenPasswordHasMinOneUpperLowerDigitSpecialCharAndMoreThanEightChars()
+			throws UserRegistrationException {
 		boolean result = userRegistration.validate("Anny12@qwert", InputField.PASSWORD);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenPasswordHasMoreThanOneUpperLowerDigitAndOneSpecialCharAndMoreThanEightChars() {
+	public void validate_shouldReturnTrueWhenPasswordHasMoreThanOneUpperLowerDigitAndOneSpecialCharAndMoreThanEightChars()
+			throws UserRegistrationException {
 		boolean result = userRegistration.validate("Anny12K@qwert", InputField.PASSWORD);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasNoUpper() {
-		boolean result = userRegistration.validate("nny12@qwert", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasNoUpper() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("nny12@qwert", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasNoLower() {
-		boolean result = userRegistration.validate("ASD123$TYK", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasNoLower() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("ASD123$TYK", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasNoNumber() {
-		boolean result = userRegistration.validate("ASDasd$TYK", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasNoNumber() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("ASDasd$TYK", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasNoSpecialChar() {
-		boolean result = userRegistration.validate("ASDasd8TYK", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasNoSpecialChar() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("ASDasd8TYK", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasMoreThanOneSpecialChar() {
-		boolean result = userRegistration.validate("AS&as%8TYK", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasMoreThanOneSpecialChar() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("AS&as%8TYK", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenPasswordHasSpace() {
-		boolean result = userRegistration.validate("AS as%8TYK", InputField.PASSWORD);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenPasswordHasSpace() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("AS as%8TYK", InputField.PASSWORD);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailDomainStartsWithDot() {
-		boolean result = userRegistration.validate("abc@.com.my", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailDomainStartsWithDot() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc@.com.my", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailHasMoreThanTwoConsecutiveDots() {
-		boolean result = userRegistration.validate("abc..2002@gmail.com", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailHasMoreThanTwoConsecutiveDots() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc..2002@gmail.com", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnTrueWhenEmailMustContainAmpersand() {
+	public void validate_shouldReturnTrueWhenEmailMustContainAmpersand() throws UserRegistrationException {
 		boolean result = userRegistration.validate("abc@yahoo.com", InputField.EMAIL);
 		assertTrue(result);
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailPartOfDomainAfterLastDotHasDigits() {
-		boolean result = userRegistration.validate("abc@gmail.com.1a", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailPartOfDomainAfterLastDotHasDigits()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc@gmail.com.1a", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailPartOfDomainAfterLastDotMustBeTwoChars() {
-		boolean result = userRegistration.validate("abc123@gmail.a", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailPartOfDomainAfterLastDotMustBeTwoChars()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc123@gmail.a", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailFirstCharCannotStartWithDot() {
-		boolean result = userRegistration.validate(".abc@abc.com", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailFirstCharCannotStartWithDot() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate(".abc@abc.com", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailAllowOnlyCharDigitUnderscoreAndDash() {
-		boolean result = userRegistration.validate("abc()*@gmail.com", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailAllowOnlyCharDigitUnderscoreAndDash()
+			throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc()*@gmail.com", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailTldAllowsOnlyCharAndDigit() {
-		boolean result = userRegistration.validate("abc@%*.com", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailTldAllowsOnlyCharAndDigit() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc@%*.com", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailsLastCharCannotEndWithDot() {
-		boolean result = userRegistration.validate("abc.@gmail.com", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailsLastCharCannotEndWithDot() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc.@gmail.com", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	@Test
-	public void validate_shouldReturnFalseWhenEmailCannotHaveMultipleTlds() {
-		boolean result = userRegistration.validate("abc@gmail.com.aa.au ", InputField.EMAIL);
-		assertFalse(result);
+	public void validate_shouldReturnFalseWhenEmailCannotHaveMultipleTlds() throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate("abc@gmail.com.aa.au ", InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "abc@gmail.com.1a", "abc123@gmail.a", ".abc@abc.com", "abc()*@gmail.com", "abc@%*.com" })
+	void parameterisedTest_shouldReturnFalseWhenEmailsAreInvalid(String email) throws UserRegistrationException {
+		Exception exception = assertThrows(UserRegistrationException.class, () -> {
+			userRegistration.validate(email, InputField.EMAIL);
+		});
+
+		String expectedMessage = "is not valid";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 }

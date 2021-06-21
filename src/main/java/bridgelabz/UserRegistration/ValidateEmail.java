@@ -8,7 +8,7 @@
 package bridgelabz.UserRegistration;
 
 public class ValidateEmail {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserRegistrationException {
 		UserRegistration userRegistration = new UserRegistration();
 		String email1 = "abc@yahoo.com";
 		String email2 = "abc-100@yahoo.com";
